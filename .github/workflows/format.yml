@@ -1,0 +1,32 @@
+name: csharpier
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  formatting-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x' # Works fine even if Unity targets older runtime
+
+      - name: Restore local dotnet tools
+        run: dotnet tool restore
+
+      - name: CSharpier --check
+        run: |
+          # Fail if any .cs file differs from CSharpier's output.
+          # We rely on .csharpierignore to skip Unity junk.
+          dotnet csharpier --check .
+
+#Code and appraoch to setting up the csharpier workflow was discovered here with use of chatGPT: https://chatgpt.com/share/68edf19c-901c-8000-920d-8d42ea2c5d23
+#other files generated include .csharpierignore and dotnet-tools.json as applicable

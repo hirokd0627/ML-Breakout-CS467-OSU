@@ -1,0 +1,17 @@
+# Unity/Build junk
+Library/
+Temp/
+Obj/
+Logs/
+Build/
+Builds/
+UserSettings/
+
+# Dotnet build outputs
+**/obj/
+**/bin/
+
+# VCS
+.git/
+
+<!-- Code and appraoch to setting up the csharpier workflow was discovered here with use of chatGPT: https://chatgpt.com/share/68edf19c-901c-8000-920d-8d42ea2c5d23 -->

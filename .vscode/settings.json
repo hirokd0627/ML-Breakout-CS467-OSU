@@ -1,0 +1,23 @@
+{
+  // --- CSharpier Integration (workspace only) ---
+
+  // Use CSharpier for formatting C# files in this workspace
+  "[csharp]": {
+    "editor.defaultFormatter": "csharpier.csharpier-vscode"
+  },
+
+  // Run formatter automatically on save
+  "editor.formatOnSave": true,
+
+  // --- Optional extras ---
+  // Prevent Unity auto-generated .csproj changes from triggering constant re-indexing
+  "files.watcherExclude": {
+    "**/Library/**": true,
+    "**/Temp/**": true,
+    "**/Obj/**": true,
+    "**/Build/**": true,
+    "**/Builds/**": true,
+    "**/UserSettings/**": true
+  },
+
+}
