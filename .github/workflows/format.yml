@@ -26,7 +26,7 @@ jobs:
         run: |
           # Fail if any .cs file differs from CSharpier's output.
           # We rely on .csharpierignore to skip Unity junk.
-          dotnet csharpier --check .
+          dotnet csharpier check .
 
 #Code and appraoch to setting up the csharpier workflow was discovered here with use of chatGPT: https://chatgpt.com/share/68edf19c-901c-8000-920d-8d42ea2c5d23
 #other files generated include .csharpierignore and dotnet-tools.json as applicable
