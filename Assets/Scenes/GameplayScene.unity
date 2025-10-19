@@ -422,7 +422,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 557882ad653a6ed4db6ca728f185042c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
 --- !u!58 &572230641
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1164,6 +1163,128 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1645416924
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1645416925}
+  - component: {fileID: 1645416926}
+  m_Layer: 0
+  m_Name: CPU Board
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1645416925
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1645416924}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1645416926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1645416924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddf0f9a4c79c6491289ae07f8bde3f3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  human: 0
+  CPU: 1
+  brickPrefab: {fileID: 1657873193821908849, guid: 176005c89ce864f2dbb063250030f12c, type: 3}
+  brickGenAnimations: 0
+  rows: 6
+  columns: 14
+  xSpacing: 0.13
+  ySpacing: 0.05
+  spawnDelay: 0.015
+  startPos: {x: 0.39, y: 2.61}
+  brickSize: {x: 0.75, y: 0.4}
+  colorRow1: {r: 1, g: 0, b: 0, a: 1}
+  colorRow2: {r: 1, g: 0.5, b: 0, a: 1}
+  colorRow3: {r: 0, g: 1, b: 0, a: 1}
+  colorRow4: {r: 0.4, g: 0.8, b: 1, a: 1}
+  colorRow5: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  colorRow6: {r: 0, g: 0, b: 1, a: 1}
+--- !u!1 &1695596852
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1695596854}
+  - component: {fileID: 1695596853}
+  m_Layer: 0
+  m_Name: HumanBoard
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1695596853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1695596852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddf0f9a4c79c6491289ae07f8bde3f3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  human: 1
+  CPU: 0
+  brickPrefab: {fileID: 1657873193821908849, guid: 176005c89ce864f2dbb063250030f12c, type: 3}
+  brickGenAnimations: 0
+  rows: 6
+  columns: 14
+  xSpacing: 0.13
+  ySpacing: 0.05
+  spawnDelay: 0.015
+  startPos: {x: -8.38, y: 2.61}
+  brickSize: {x: 0.75, y: 0.4}
+  colorRow1: {r: 1, g: 0, b: 0, a: 1}
+  colorRow2: {r: 1, g: 0.5, b: 0, a: 1}
+  colorRow3: {r: 0, g: 1, b: 0, a: 1}
+  colorRow4: {r: 0.4, g: 0.8, b: 1, a: 1}
+  colorRow5: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  colorRow6: {r: 0, g: 0, b: 1, a: 1}
+--- !u!4 &1695596854
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1695596852}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1806269234
 GameObject:
   m_ObjectHideFlags: 0
@@ -1324,3 +1445,5 @@ SceneRoots:
   - {fileID: 1522589305}
   - {fileID: 1023192171}
   - {fileID: 572230644}
+  - {fileID: 1645416925}
+  - {fileID: 1695596854}
