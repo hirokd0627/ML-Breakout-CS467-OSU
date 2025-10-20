@@ -3,12 +3,38 @@ using UnityEngine;
 public class Ball : MonoBehaviour
 {
     private const float speed = 5f;
+    private const float lowerBound = -6f;
     private Rigidbody2D rb;
+    private bool gameOver;
+    public BallCount ballCount;
     private Vector2 previousVelocity;
+    private Vector3 ballStartPosition = new Vector3(-4.5f, -3.68f, 0f);
 
     void Start()
     {
+        LaunchBall();
+    }
+
+    void Update()
+    {
+        float ballPosY = transform.position.y;
+
+        // Relaunch ball or end game
+        if (ballPosY < lowerBound && !gameOver)
+        {
+            gameOver = ballCount.ballCount == 0;
+            if (!gameOver)
+            {
+                ballCount.decrementBallCount();
+                LaunchBall();
+            }
+        }
+    }
+
+    void LaunchBall()
+    {
         rb = GetComponent<Rigidbody2D>();
+        transform.position = ballStartPosition;
 
         // Launch the ball in a random diagonal direction
         Vector2 direction = new Vector2(Random.Range(-1f, 1f), 1f).normalized;
