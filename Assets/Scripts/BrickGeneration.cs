@@ -65,21 +65,46 @@ public class BrickGeneration : MonoBehaviour
 
                 // Color brick gradient by row
                 SpriteRenderer sr = newBrick.GetComponent<SpriteRenderer>();
+                BrickCollision bc = newBrick.GetComponent<BrickCollision>();
                 if (sr != null)
                 {
                     // Assign color based on row
                     if (row == 0)
+                    {
                         sr.color = colorRow1;
+                        if (bc != null)
+                            bc.points = 7;
+                    }
                     else if (row == 1)
+                    {
                         sr.color = colorRow2;
+                        if (bc != null)
+                            bc.points = 7;
+                    }
                     else if (row == 2)
+                    {
                         sr.color = colorRow3;
+                        if (bc != null)
+                            bc.points = 4;
+                    }
                     else if (row == 3)
+                    {
                         sr.color = colorRow4;
+                        if (bc != null)
+                            bc.points = 4;
+                    }
                     else if (row == 4)
+                    {
                         sr.color = colorRow5;
+                        if (bc != null)
+                            bc.points = 1;
+                    }
                     else
+                    {
                         sr.color = colorRow6;
+                        if (bc != null)
+                            bc.points = 1;
+                    }
                 }
 
                 // Animate brick spawn
