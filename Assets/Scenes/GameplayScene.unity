@@ -1017,7 +1017,7 @@ GameObject:
   - component: {fileID: 788616421}
   m_Layer: 0
   m_Name: CPU Ball
-  m_TagString: Untagged
+  m_TagString: Ball
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2091,8 +2091,8 @@ MonoBehaviour:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
-  ballRb: {fileID: 0}
-  paddle: {fileID: 0}
+  ballRb: {fileID: 788616423}
+  paddle: {fileID: 1150144333}
   arenaHalfWidth: 8.8
   arenaHalfHeight: 4.5
   maxBallSpeed: 5
