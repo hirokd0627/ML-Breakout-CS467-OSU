@@ -66,6 +66,15 @@ public class BrickGeneration : MonoBehaviour
                 // Color brick gradient by row
                 SpriteRenderer sr = newBrick.GetComponent<SpriteRenderer>();
                 BrickCollision bc = newBrick.GetComponent<BrickCollision>();
+
+                //removes the brick collision logic (scoring) if cpu
+                //TODO: Remove this eventually when CPU needs to start its own scoring
+                if (!human)
+                {
+                    Destroy(bc);
+                    bc = null;
+                }
+
                 if (sr != null)
                 {
                     // Assign color based on row

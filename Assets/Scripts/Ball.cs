@@ -8,7 +8,9 @@ public class Ball : MonoBehaviour
     private bool gameOver;
     public BallCount ballCount;
     private Vector2 previousVelocity;
-    private Vector3 ballStartPosition = new Vector3(-4.5f, -3.68f, 0f);
+
+    // minimal bounce angle from horizontal (degrees). Ensures enough vertical velocity.
+    private const float minBounceAngleDeg = 30f;
 
     void Start()
     {
@@ -34,7 +36,6 @@ public class Ball : MonoBehaviour
     void LaunchBall()
     {
         rb = GetComponent<Rigidbody2D>();
-        transform.position = ballStartPosition;
 
         // Launch the ball in a random diagonal direction
         Vector2 direction = new Vector2(Random.Range(-1f, 1f), 1f).normalized;
@@ -85,6 +86,10 @@ public class Ball : MonoBehaviour
                 rb.linearVelocity = new Vector2(-1.0f * previousVelocity.x, previousVelocity.y);
             }
         }
+        else
+        {
+            ClampBounceAngle();
+        }
     }
 
     void FixedUpdate()
@@ -111,5 +116,39 @@ public class Ball : MonoBehaviour
         // If ball hits the top side of paddle, normal vector points upward (angle = 90).
         // If ball hits paddle corner, angle is not 90, for simplicity, use 45 degree as boundary.
         return angle >= 45.0f && angle <= 135.0f;
+    }
+
+    private void ClampBounceAngle()
+    {
+        /*
+        ensure the velocity has at least minBounceAngleDeg from horizontal
+        */
+
+        // angle in degrees between velocity and +X axis
+        float angleDeg = Mathf.Abs(
+            Mathf.Atan2(rb.linearVelocity.y, rb.linearVelocity.x) * Mathf.Rad2Deg
+        );
+        // convert this to the minimum angle from horizontal
+        float angleFromHorizontal = Mathf.Min(angleDeg, 180f - angleDeg);
+
+        //now check to see if its below the threshold (too steep)
+        if (angleFromHorizontal < minBounceAngleDeg)
+        {
+            // decide direction signs (preserve general left/right and up/down)
+            float signX = Mathf.Sign(rb.linearVelocity.x);
+            float signY = Mathf.Sign(rb.linearVelocity.y);
+
+            // fallback when vertical sign is exactly zero, otherwise newVy will be zero still
+            if (Mathf.Approximately(signY, 0f))
+            {
+                signY = Mathf.Sign(previousVelocity.y != 0f ? previousVelocity.y : 1f);
+            }
+
+            float angRad = Mathf.Deg2Rad * minBounceAngleDeg;
+            float newVx = signX * Mathf.Cos(angRad) * rb.linearVelocity.magnitude;
+            float newVy = signY * Mathf.Sin(angRad) * rb.linearVelocity.magnitude;
+
+            rb.linearVelocity = new Vector2(newVx, newVy);
+        }
     }
 }
