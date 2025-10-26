@@ -1,3 +1,4 @@
+using System;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
@@ -10,6 +11,9 @@ public class PaddleAgent : Agent
     public float arenaHalfWidth = 8.8f; //full span of cpu side since center is 0
 
     public float arenaHalfHeight = 4.5f; //for normialization, half of the y height span of cpu side
+    public float paddleMoveMaxX = 7.5f; // Maximum X position of the paddle
+    public float paddleMoveMinX = 1.4f; // Minimum X position of the paddle
+    public float paddleMoveSpeed = 18; // Paddle move speed
 
     public float maxBallSpeed = 5f; // fasted expected speed
 
@@ -83,11 +87,41 @@ public class PaddleAgent : Agent
 
     public override void OnActionReceived(ActionBuffers actions)
     {
-        //TBD Placehold method for now
+        if (actions.ContinuousActions.Length == 0) // no actions
+            return;
+
+        float horizMovement = actions.ContinuousActions[0];
+
+        // Determines next paddle position.
+        // Since this function called at fixed intervals of DecisionRequester's DecisionPeriod,
+        // use fixedDeltaTime.
+        Vector3 nextPos = PaddleMovement.NextPaddlePosition(
+            horizMovement,
+            paddle,
+            paddleMoveMinX,
+            paddleMoveMaxX,
+            paddleMoveSpeed,
+            Time.fixedDeltaTime
+        );
+
+        // Sets the paddle position
+        paddle.position = nextPos;
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
     {
-        //TBD Placehold method for now
+        // To control agent, set user input into action buffers.
+        if (!PaddleMovement.IsHumanInput())
+        {
+            var actions = actionsOut.ContinuousActions;
+            if (actions.Length < 1)
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(actionsOut),
+                    "ContinuousActions should be set to 1 in Behavior Parameters"
+                );
+            }
+            actions[0] = PaddleMovement.GetMovementInput();
+        }
     }
 }

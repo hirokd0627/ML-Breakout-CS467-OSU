@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PaddleMovement : MonoBehaviour
@@ -15,13 +16,70 @@ public class PaddleMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        horizMovement = Input.GetAxis("Horizontal");
+        if (IsHumanInput())
+        {
+            // Moves paddle
+            transform.position = NextPaddlePosition(
+                GetMovementInput(),
+                transform,
+                minX,
+                maxX,
+                speed,
+                Time.deltaTime
+            );
+        }
+    }
+
+    /// <summary>
+    /// Gets input value for paddle movement, positive value is right and negative is left.
+    /// </summary>
+    public static float GetMovementInput()
+    {
+        return Input.GetAxis("Horizontal");
+    }
+
+    /// <summary>
+    /// Returns true if input is for Human, false if input is for CPU.
+    /// </summary>
+    public static bool IsHumanInput()
+    {
+        // If shift key is pressed, controls CPU, otherwise controls Human.
+        return !(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift));
+    }
+
+    /// <summary>
+    /// Returns next paddle position with input and movement limits.
+    /// </summary>
+    /// <param name="movement">Movement input, where positive is right and negative is left</param>
+    /// <param name="paddle">Transform of paddle</param>
+    /// <param name="minX">Left limit for paddle movement</param>
+    /// <param name="maxX">Right limit for paddle movement</param>
+    /// <param name="speed">Movement speed of paddle</param>
+    /// <param name="timeDelta">Time elapsed between frames</param>
+    /// <exception cref="ArgumentNullException">If paddle is null</exception>
+    public static Vector3 NextPaddlePosition(
+        float movement,
+        Transform paddle,
+        float minX,
+        float maxX,
+        float speed,
+        float timeDelta
+    )
+    {
+        if (paddle == null)
+            throw new ArgumentNullException("paddle");
+
+        Vector3 nextPos = paddle.position;
+
+        // Calculate next position if paddle is within movement limits.
         if (
-            (horizMovement > 0 && transform.position.x < maxX)
-            || (horizMovement < 0 && transform.position.x > minX)
+            (movement > 0 && paddle.position.x < maxX) || (movement < 0 && paddle.position.x > minX)
         )
         {
-            transform.position += Vector3.right * horizMovement * speed * Time.deltaTime;
+            // NOTE: Depending on input timing, position may exceed minX or maxX.
+            //       This will be addressed in another issue.
+            nextPos = paddle.position + Vector3.right * movement * speed * timeDelta;
         }
+        return nextPos;
     }
 }

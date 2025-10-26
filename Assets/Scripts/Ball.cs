@@ -8,6 +8,7 @@ public class Ball : MonoBehaviour
     private bool gameOver;
     public BallCount ballCount;
     private Vector2 previousVelocity;
+    public bool human; // Whether this ball is controlled by Human.
 
     // minimal bounce angle from horizontal (degrees). Ensures enough vertical velocity.
     private const float minBounceAngleDeg = 30f;
@@ -24,10 +25,18 @@ public class Ball : MonoBehaviour
         // Relaunch ball or end game
         if (ballPosY < lowerBound && !gameOver)
         {
-            gameOver = ballCount.ballCount == 0;
-            if (!gameOver)
+            // TODO: Temporarily spawn infinite balls to avoid crashes until CPU ball management is implemented.
+            if (human)
             {
-                ballCount.decrementBallCount();
+                gameOver = ballCount.ballCount == 0;
+                if (!gameOver)
+                {
+                    ballCount.decrementBallCount();
+                    LaunchBall();
+                }
+            }
+            else
+            {
                 LaunchBall();
             }
         }

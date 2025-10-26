@@ -181,7 +181,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &243612524
 Transform:
   m_ObjectHideFlags: 0
@@ -315,7 +315,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &260597295
 Transform:
   m_ObjectHideFlags: 0
@@ -1035,6 +1035,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ballCount: {fileID: 0}
+  human: 0
 --- !u!58 &788616422
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -2095,8 +2096,11 @@ MonoBehaviour:
   paddle: {fileID: 1150144333}
   arenaHalfWidth: 8.8
   arenaHalfHeight: 4.5
+  paddleMoveMaxX: 7.5
+  paddleMoveMinX: 1.4
+  paddleMoveSpeed: 18
   maxBallSpeed: 5
-  logObservations: 1
+  logObservations: 0
   logEveryNSteps: 25
 --- !u!114 &1553062254
 MonoBehaviour:
@@ -2115,10 +2119,10 @@ MonoBehaviour:
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 1
-      BranchSizes: 01000000
-    VectorActionSize: 
+      BranchSizes: 
+    VectorActionSize: 01000000
     VectorActionDescriptions: []
-    VectorActionSpaceType: 0
+    VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
@@ -2238,6 +2242,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ballCount: {fileID: 178751013}
+  human: 1
 --- !u!58 &1676996158
 CircleCollider2D:
   m_ObjectHideFlags: 0
