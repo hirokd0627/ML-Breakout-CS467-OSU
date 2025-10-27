@@ -34,6 +34,23 @@ public class Ball : MonoBehaviour
                     ballCount.decrementBallCount();
                     LaunchBall();
                 }
+                else
+                {
+                    int finalScore = ScoreManager.instance.score;
+
+                    if (LeaderboardManager.instance.Qualifies(finalScore))
+                    {
+                        Debug.Log("Score qualifies for leaderboard: " + finalScore);
+
+                        UsernameEntryUI usernameUI = UsernameEntryUI.instance;
+
+                        if (usernameUI != null)
+                        {
+                            Debug.Log("Found UsernameEntryUI, showing panel.");
+                            usernameUI.Show(finalScore);
+                        }
+                    }
+                }
             }
             else
             {
