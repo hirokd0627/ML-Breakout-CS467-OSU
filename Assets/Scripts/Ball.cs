@@ -3,7 +3,7 @@ using UnityEngine;
 public class Ball : MonoBehaviour
 {
     private const float speed = 5f;
-    private const float lowerBound = -6f;
+    private const float lowerBound = -5f;
     private Rigidbody2D rb;
     private bool gameOver;
     public BallCount ballCount;
@@ -13,8 +13,11 @@ public class Ball : MonoBehaviour
     // minimal bounce angle from horizontal (degrees). Ensures enough vertical velocity.
     private const float minBounceAngleDeg = 30f;
 
+    private Vector3 startPosition;
+
     void Start()
     {
+        startPosition = transform.position;
         LaunchBall();
     }
 
@@ -25,7 +28,6 @@ public class Ball : MonoBehaviour
         // Relaunch ball or end game
         if (ballPosY < lowerBound && !gameOver)
         {
-            // TODO: Temporarily spawn infinite balls to avoid crashes until CPU ball management is implemented.
             if (human)
             {
                 gameOver = ballCount.ballCount == 0;
@@ -36,22 +38,27 @@ public class Ball : MonoBehaviour
                 }
                 else
                 {
-                    int finalScore = ScoreManager.instance.score;
+                    gameOver = true;
+                    Destroy(gameObject);
 
-                    if (LeaderboardManager.instance.Qualifies(finalScore))
-                    {
-                        Debug.Log("Score qualifies for leaderboard: " + finalScore);
+                    //TODO Leader board turned off temporarily until rest of functionality is complete to finalize it.
+                    // int finalScore = ScoreManager.instance.score;
 
-                        UsernameEntryUI usernameUI = UsernameEntryUI.instance;
+                    // if (LeaderboardManager.instance.Qualifies(finalScore))
+                    // {
+                    //     Debug.Log("Score qualifies for leaderboard: " + finalScore);
 
-                        if (usernameUI != null)
-                        {
-                            Debug.Log("Found UsernameEntryUI, showing panel.");
-                            usernameUI.Show(finalScore);
-                        }
-                    }
+                    //     UsernameEntryUI usernameUI = UsernameEntryUI.instance;
+
+                    //     if (usernameUI != null)
+                    //     {
+                    //         Debug.Log("Found UsernameEntryUI, showing panel.");
+                    //         usernameUI.Show(finalScore);
+                    //     }
+                    // }
                 }
             }
+            // TODO: Temporarily spawn infinite balls to avoid crashes until CPU ball management is implemented.
             else
             {
                 LaunchBall();
@@ -62,6 +69,9 @@ public class Ball : MonoBehaviour
     void LaunchBall()
     {
         rb = GetComponent<Rigidbody2D>();
+
+        //reset position
+        transform.position = startPosition;
 
         // Launch the ball in a random diagonal direction
         Vector2 direction = new Vector2(Random.Range(-1f, 1f), 1f).normalized;

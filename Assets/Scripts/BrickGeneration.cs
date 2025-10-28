@@ -67,12 +67,13 @@ public class BrickGeneration : MonoBehaviour
                 SpriteRenderer sr = newBrick.GetComponent<SpriteRenderer>();
                 BrickCollision bc = newBrick.GetComponent<BrickCollision>();
 
-                //removes the brick collision logic (scoring) if cpu
-                //TODO: Remove this eventually when CPU needs to start its own scoring
-                if (!human)
+                if (human)
                 {
-                    Destroy(bc);
-                    bc = null;
+                    bc.ownerIsCPU = false;
+                }
+                else
+                {
+                    bc.ownerIsCPU = true;
                 }
 
                 if (sr != null)

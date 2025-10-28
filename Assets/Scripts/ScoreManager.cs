@@ -5,8 +5,11 @@ public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager instance;
 
-    public int score = 0;
-    public TMP_Text scoreText;
+    public int humanScore = 0;
+    public int cpuScore = 0;
+
+    public TMP_Text humanScoreText;
+    public TMP_Text cpuScoreText;
 
     void Awake()
     {
@@ -21,15 +24,24 @@ public class ScoreManager : MonoBehaviour
         UpdateScoreText();
     }
 
-    public void AddScore(int points)
+    public void AddScore(int points, bool ownerIsCPU)
     {
-        score += points;
+        if (ownerIsCPU)
+        {
+            cpuScore += points;
+        }
+        else
+        {
+            humanScore += points;
+        }
         UpdateScoreText();
     }
 
     void UpdateScoreText()
     {
-        if (scoreText != null)
-            scoreText.text = "Score: " + score;
+        if (humanScoreText != null)
+            humanScoreText.text = "Score: " + humanScore;
+        if (cpuScoreText != null)
+            cpuScoreText.text = "Score: " + cpuScore;
     }
 }
