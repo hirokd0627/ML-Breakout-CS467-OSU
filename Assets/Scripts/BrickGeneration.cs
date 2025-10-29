@@ -23,9 +23,11 @@ public class BrickGeneration : MonoBehaviour
     public Vector2 startPos = new Vector2(-0.0523f, 0.0024f); // Top-left corner of brick layout
     public Vector2 brickSize = new Vector2(0.482675f, 0.2672863f); // Width/height of each brick
 
+    public static readonly Color BrickColorOrange = new Color(1f, 0.5f, 0f); //orange color
+
     [Header("Color Settings")]
     public Color colorRow1 = Color.red;
-    public Color colorRow2 = new Color(1f, 0.5f, 0f); //orange
+    public Color colorRow2 = BrickColorOrange; //orange
     public Color colorRow3 = Color.green;
     public Color colorRow4 = new Color(0.4f, 0.8f, 1f); //green
     public Color colorRow5 = Color.yellow;

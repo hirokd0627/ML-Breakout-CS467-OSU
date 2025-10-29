@@ -1,9 +1,10 @@
+using System;
 using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
     private PaddleAgent cpuAgent;
-    private const float speed = 5f;
+    public BallSpeed ballSpeed; // Controls ball speed
     private const float lowerBound = -5f;
     private Rigidbody2D rb;
     private bool gameOver;
@@ -16,6 +17,8 @@ public class Ball : MonoBehaviour
 
     private Vector3 startPosition;
 
+    public PaddleWidth paddleWidth; // Controls paddle width
+
     void Awake()
     {
         var go = GameObject.FindWithTag("MLAgent");
@@ -25,6 +28,12 @@ public class Ball : MonoBehaviour
 
     void Start()
     {
+        if (ballSpeed == null)
+            throw new ArgumentException("ballSpeed");
+
+        if (paddleWidth == null)
+            throw new ArgumentException("paddleWidth");
+
         startPosition = transform.position;
         LaunchBall();
     }
@@ -82,9 +91,16 @@ public class Ball : MonoBehaviour
         //reset position
         transform.position = startPosition;
 
+        //reset ball speed
+        ballSpeed.ResetSpeed();
+
         // Launch the ball in a random diagonal direction
-        Vector2 direction = new Vector2(Random.Range(-1f, 1f), 1f).normalized;
-        rb.linearVelocity = direction * speed;
+        Vector2 direction = new Vector2(UnityEngine.Random.Range(-1f, 1f), 1f).normalized;
+        rb.linearVelocity = direction * ballSpeed.Speed;
+        previousVelocity = rb.linearVelocity;
+
+        //reset paddle width
+        paddleWidth.ResetWidth();
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -128,12 +144,14 @@ public class Ball : MonoBehaviour
                 float rad = Mathf.Deg2Rad * deg;
                 Vector2 direction = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
 
-                rb.linearVelocity = direction * speed;
+                rb.linearVelocity = direction * ballSpeed.Speed;
+                previousVelocity = rb.linearVelocity;
             }
             else // left or right side
             {
                 // Since ball is simply lost, so it bounces at same angle as angle of incidence.
                 rb.linearVelocity = new Vector2(-1.0f * previousVelocity.x, previousVelocity.y);
+                previousVelocity = rb.linearVelocity;
             }
         }
         else
@@ -199,6 +217,18 @@ public class Ball : MonoBehaviour
             float newVy = signY * Mathf.Sin(angRad) * rb.linearVelocity.magnitude;
 
             rb.linearVelocity = new Vector2(newVx, newVy);
+            previousVelocity = rb.linearVelocity;
         }
+    }
+
+    /// <summary>
+    /// Sets ball speed, preserving its direction.
+    /// </summary>
+    /// <param name="speed">ball speed</param>
+    public void SetSpeed(float speed)
+    {
+        Vector2 direction = rb.linearVelocity.normalized; // keep direction
+        rb.linearVelocity = direction * speed;
+        previousVelocity = rb.linearVelocity;
     }
 }

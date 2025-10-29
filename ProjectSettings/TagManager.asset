@@ -7,6 +7,8 @@ TagManager:
   - Paddle
   - Ball
   - MLAgent
+  - Brick
+  - TopWall
   layers:
   - Default
   - TransparentFX

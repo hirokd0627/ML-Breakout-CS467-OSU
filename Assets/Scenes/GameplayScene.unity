@@ -1416,6 +1416,8 @@ GameObject:
   - component: {fileID: 788616423}
   - component: {fileID: 788616422}
   - component: {fileID: 788616421}
+  - component: {fileID: 788616426}
+  - component: {fileID: 788616427}
   m_Layer: 0
   m_Name: CPU Ball
   m_TagString: Ball
@@ -1435,8 +1437,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 557882ad653a6ed4db6ca728f185042c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ballSpeed: {fileID: 788616426}
   ballCount: {fileID: 0}
   human: 0
+  paddleWidth: {fileID: 788616427}
 --- !u!58 &788616422
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1570,6 +1574,42 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &788616426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 788616420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab806c21f490f4222b0888a0612a67b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ball: {fileID: 788616421}
+  bounceThresholdLow: 4
+  bounceThresholdMedium: 12
+  ballSpeedInitial: 5
+  ballSpeedLow: 6.5
+  ballSpeedMedium: 8
+  ballSpeedHigh: 10
+  logObservations: 0
+--- !u!114 &788616427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 788616420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 146c9c286263a4877ada0cfb9de87728, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  human: 0
+  paddle: {fileID: 1150144330}
+  paddleMovement: {fileID: 0}
+  paddleAgent: {fileID: 1553062253}
 --- !u!1 &840974403
 GameObject:
   m_ObjectHideFlags: 0
@@ -2279,7 +2319,7 @@ GameObject:
   - component: {fileID: 1135455396}
   m_Layer: 5
   m_Name: Top Wall
-  m_TagString: Untagged
+  m_TagString: TopWall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4249,6 +4289,8 @@ GameObject:
   - component: {fileID: 1676996159}
   - component: {fileID: 1676996158}
   - component: {fileID: 1676996157}
+  - component: {fileID: 1676996162}
+  - component: {fileID: 1676996163}
   m_Layer: 0
   m_Name: Human Ball
   m_TagString: Ball
@@ -4268,8 +4310,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 557882ad653a6ed4db6ca728f185042c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ballSpeed: {fileID: 1676996162}
   ballCount: {fileID: 178751013}
   human: 1
+  paddleWidth: {fileID: 1676996163}
 --- !u!58 &1676996158
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -4403,6 +4447,42 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1676996162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1676996156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab806c21f490f4222b0888a0612a67b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ball: {fileID: 1676996157}
+  bounceThresholdLow: 4
+  bounceThresholdMedium: 12
+  ballSpeedInitial: 5
+  ballSpeedLow: 6.5
+  ballSpeedMedium: 8
+  ballSpeedHigh: 10
+  logObservations: 0
+--- !u!114 &1676996163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1676996156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 146c9c286263a4877ada0cfb9de87728, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  human: 1
+  paddle: {fileID: 1806269234}
+  paddleMovement: {fileID: 1806269235}
+  paddleAgent: {fileID: 0}
 --- !u!1 &1695596852
 GameObject:
   m_ObjectHideFlags: 0
