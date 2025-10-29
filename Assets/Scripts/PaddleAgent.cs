@@ -6,6 +6,38 @@ using UnityEngine;
 
 public class PaddleAgent : Agent
 {
+    // tuning for rewards
+    public float rewardHitBrick = 1f;
+    public float rewardHitPaddle = 0.1f;
+    public float rewardMiss = -1f;
+    public float stepPenalty = -0.001f;
+
+    // called from external codes
+    public void AddBrickReward()
+    {
+        AddReward(rewardHitBrick);
+        Debug.Log(
+            $"[PaddleAgent] AddBrickReward {rewardHitBrick} totalReward={GetCumulativeReward()}",
+            this
+        );
+    }
+
+    public void AddPaddleHitReward()
+    {
+        AddReward(rewardHitPaddle);
+        Debug.Log(
+            $"[PaddleAgent] AddPaddleHitReward {rewardHitPaddle} totalReward={GetCumulativeReward()}",
+            this
+        );
+    }
+
+    public void AddMissPenaltyAndEnd()
+    {
+        AddReward(rewardMiss);
+        Debug.Log($"[PaddleAgent] Miss penalty {rewardMiss} -> EndEpisode()", this);
+        EndEpisode();
+    }
+
     public Rigidbody2D ballRb;
     public Transform paddle;
     public float arenaHalfWidth = 8.8f; //full span of cpu side since center is 0
@@ -20,7 +52,8 @@ public class PaddleAgent : Agent
     public bool logObservations = false; // for simple logging reasons only
 
     public int logEveryNSteps = 25;
-    private int stepCount;
+    public int stepCount;
+    public int episodeCount = 0;
 
     public override void Initialize()
     {
@@ -29,15 +62,13 @@ public class PaddleAgent : Agent
             Debug.LogError("PaddleAgent: ballRb not assigned.");
         if (!paddle)
             Debug.LogError("PaddleAgent: paddle not assigned.");
-
-        //NOTE: the initialize method will be used more later on...
     }
 
     public override void OnEpisodeBegin()
     {
         stepCount = 0;
+        episodeCount++;
         Debug.Log("On Episode Begin function...");
-        //TBD Placehold method for now
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -87,6 +118,8 @@ public class PaddleAgent : Agent
 
     public override void OnActionReceived(ActionBuffers actions)
     {
+        AddReward(stepPenalty); //small penalty for each decision
+
         if (actions.ContinuousActions.Length == 0) // no actions
             return;
 

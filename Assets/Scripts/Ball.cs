@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
+    private PaddleAgent cpuAgent;
     private const float speed = 5f;
     private const float lowerBound = -5f;
     private Rigidbody2D rb;
@@ -14,6 +15,13 @@ public class Ball : MonoBehaviour
     private const float minBounceAngleDeg = 30f;
 
     private Vector3 startPosition;
+
+    void Awake()
+    {
+        var go = GameObject.FindWithTag("MLAgent");
+        if (go != null)
+            cpuAgent = go.GetComponent<PaddleAgent>();
+    }
 
     void Start()
     {
@@ -59,8 +67,9 @@ public class Ball : MonoBehaviour
                 }
             }
             // TODO: Temporarily spawn infinite balls to avoid crashes until CPU ball management is implemented.
-            else
+            else //if cpu
             {
+                cpuAgent.AddMissPenaltyAndEnd();
                 LaunchBall();
             }
         }
@@ -80,6 +89,11 @@ public class Ball : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
+        if (collision.gameObject.CompareTag("Paddle") && !human)
+        {
+            cpuAgent.AddPaddleHitReward();
+        }
+
         if (collision.gameObject.CompareTag("Paddle")) // collided with paddle
         {
             if (HitPaddleTopSide(collision)) // top side
