@@ -7,10 +7,10 @@ using UnityEngine;
 public class PaddleAgent : Agent
 {
     // tuning for rewards
-    public float rewardHitBrick = 1f;
-    public float rewardHitPaddle = 0.1f;
-    public float rewardMiss = -1f;
-    public float stepPenalty = -0.001f;
+    public float rewardHitBrick = 2f;
+    public float rewardHitPaddle = 0.05f;
+    public float rewardMiss = -3f;
+    public float stepPenalty = -0.0005f;
 
     // called from external codes
     public void AddBrickReward()
