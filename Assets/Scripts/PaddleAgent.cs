@@ -73,13 +73,29 @@ public class PaddleAgent : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
+        // New observation vector (14 floats):
+        // 0: nxBallX (ball X pos normalized to arenaHalfWidth)
+        // 1: nxBallY (ball Y pos normalized to arenaHalfHeight)
+        // 2: nxVx (ball X velocity normalized)
+        // 3: nxVy (ball Y velocity normalized)
+        // 4: nxPaddleX (paddle X pos normalized)
+        // 5: distPaddleBall (distance paddle->ball normalized)
+        // 6: relBallX (ball X relative to paddle normalized by arenaHalfWidth)
+        // 7: relBallY (ball Y relative to paddle normalized by arenaHalfHeight)
+        // 8: dirToBallX (unit vector from paddle to ball, x)
+        // 9: dirToBallY (unit vector from paddle to ball, y)
+        // 10: leftDistNorm (distance from left wall to paddle left edge normalized)
+        // 11: rightDistNorm (distance from right wall to paddle right edge normalized)
+        // 12: nxBallSpeed (ball speed magnitude normalized)
+        // 13: ballMovingDown (1 if ball moving downwards, 0 otherwise)
+
         if (!ballRb || !paddle)
         {
-            sensor.AddObservation(new float[5]); // keep shape consistent if miswired
+            sensor.AddObservation(new float[14]); // keep shape consistent if miswired
             return;
         }
 
-        // positions here are normalized to between -1, 1
+        // basic normalized positions and velocities
         float nxBallX = Mathf.Clamp(ballRb.position.x / Mathf.Max(0.001f, arenaHalfWidth), -1f, 1f);
         float nxBallY = Mathf.Clamp(
             ballRb.position.y / Mathf.Max(0.001f, arenaHalfHeight),
@@ -87,31 +103,94 @@ public class PaddleAgent : Agent
             1f
         );
 
-        // velocities normalized
         Vector2 v = ballRb.linearVelocity;
         float nxVx = Mathf.Clamp(v.x / Mathf.Max(0.001f, maxBallSpeed), -1f, 1f);
         float nxVy = Mathf.Clamp(v.y / Mathf.Max(0.001f, maxBallSpeed), -1f, 1f);
 
-        // paddle x position normalized
         float nxPaddleX = Mathf.Clamp(
             paddle.position.x / Mathf.Max(0.001f, arenaHalfWidth),
             -1f,
             1f
         );
 
-        //add all observations to the sensor
-        sensor.AddObservation(nxBallX);
-        sensor.AddObservation(nxBallY);
-        sensor.AddObservation(nxVx);
-        sensor.AddObservation(nxVy);
-        sensor.AddObservation(nxPaddleX);
+        // compute paddle half-width using collider or sprite bounds if available
+        float paddleHalfWidth = 0.5f; // fallback
+        Collider2D col = paddle.GetComponent<Collider2D>();
+        if (col != null)
+        {
+            paddleHalfWidth = col.bounds.size.x * 0.5f;
+        }
+        else
+        {
+            var sr = paddle.GetComponent<SpriteRenderer>();
+            if (sr != null)
+                paddleHalfWidth = sr.bounds.size.x * 0.5f;
+            else
+                paddleHalfWidth = Mathf.Abs(paddle.localScale.x) * 0.5f; // last resort guess
+        }
+
+        // distance paddle -> ball (Euclidean) normalized by largest arena half-dimension * 2 (approx full span)
+        float maxHalf = Mathf.Max(arenaHalfWidth, arenaHalfHeight);
+        float rawDist = Vector2.Distance(ballRb.position, paddle.position);
+        float distPaddleBall = Mathf.Clamp(rawDist / (2f * maxHalf), 0f, 1f);
+
+        // ball relative to paddle (signed), normalized
+        float relBallX = Mathf.Clamp(
+            (ballRb.position.x - paddle.position.x) / Mathf.Max(0.001f, arenaHalfWidth),
+            -1f,
+            1f
+        );
+        float relBallY = Mathf.Clamp(
+            (ballRb.position.y - paddle.position.y) / Mathf.Max(0.001f, arenaHalfHeight),
+            -1f,
+            1f
+        );
+
+        // direction from paddle center to ball (unit vector)
+        Vector2 dirToBall = (ballRb.position - (Vector2)paddle.position);
+        if (dirToBall == Vector2.zero)
+            dirToBall = Vector2.up; // avoid zero
+        dirToBall.Normalize();
+
+        // distance from walls to paddle edges (no raycast) � compute in world units then normalize by full arena width
+        // left wall at -arenaHalfWidth, right wall at +arenaHalfWidth
+        float leftEdgeX = paddle.position.x - paddleHalfWidth;
+        float rightEdgeX = paddle.position.x + paddleHalfWidth;
+        float leftDist = leftEdgeX - (-arenaHalfWidth); // >= 0
+        float rightDist = arenaHalfWidth - rightEdgeX; // >= 0
+        // normalize by full arena width (2 * arenaHalfWidth) to roughly map to 0..1
+        float arenaFullWidth = Mathf.Max(0.001f, 2f * arenaHalfWidth);
+        float leftDistNorm = Mathf.Clamp(leftDist / arenaFullWidth, 0f, 1f);
+        float rightDistNorm = Mathf.Clamp(rightDist / arenaFullWidth, 0f, 1f);
+
+        // ball speed normalized
+        float nxBallSpeed = Mathf.Clamp(v.magnitude / Mathf.Max(0.001f, maxBallSpeed), 0f, 1f);
+
+        // ball moving downwards flag
+        float ballMovingDown = v.y < 0f ? 1f : 0f;
+
+        // add observations in the order documented above
+        sensor.AddObservation(nxBallX); // 0
+        sensor.AddObservation(nxBallY); // 1
+        sensor.AddObservation(nxVx); // 2
+        sensor.AddObservation(nxVy); // 3
+        sensor.AddObservation(nxPaddleX); // 4
+        sensor.AddObservation(distPaddleBall); // 5
+        sensor.AddObservation(relBallX); // 6
+        sensor.AddObservation(relBallY); // 7
+        sensor.AddObservation(dirToBall.x); // 8
+        sensor.AddObservation(dirToBall.y); // 9
+        sensor.AddObservation(leftDistNorm); // 10
+        sensor.AddObservation(rightDistNorm); // 11
+        sensor.AddObservation(nxBallSpeed); // 12
+        sensor.AddObservation(ballMovingDown); // 13
 
         //simple console logging to verify
         stepCount++;
         if (logObservations && (stepCount % Mathf.Max(1, logEveryNSteps) == 0))
         {
             Debug.Log(
-                $"[OBS] ball({nxBallX:F2},{nxBallY:F2}) v({nxVx:F2},{nxVy:F2}) paddleX({nxPaddleX:F2}) len=5"
+                $"[OBS] ball({nxBallX:F2},{nxBallY:F2}) v({nxVx:F2},{nxVy:F2}) paddleX({nxPaddleX:F2}) distPB({distPaddleBall:F2}) rel({relBallX:F2},{relBallY:F2}) dir({dirToBall.x:F2},{dirToBall.y:F2}) leftR({leftDistNorm:F2}) rightR({rightDistNorm:F2}) speed({nxBallSpeed:F2}) down({ballMovingDown}) len=14"
             );
         }
     }
