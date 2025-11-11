@@ -58,21 +58,20 @@ public class Ball : MonoBehaviour
                     gameOver = true;
                     Destroy(gameObject);
 
-                    //TODO Leader board turned off temporarily until rest of functionality is complete to finalize it.
-                    // int finalScore = ScoreManager.instance.score;
+                    int finalScore = ScoreManager.instance.humanScore;
 
-                    // if (LeaderboardManager.instance.Qualifies(finalScore))
-                    // {
-                    //     Debug.Log("Score qualifies for leaderboard: " + finalScore);
+                    if (LeaderboardManager.instance.Qualifies(finalScore))
+                    {
+                        Debug.Log("Score qualifies for leaderboard: " + finalScore);
 
-                    //     UsernameEntryUI usernameUI = UsernameEntryUI.instance;
+                        UsernameEntryUI usernameUI = UsernameEntryUI.instance;
 
-                    //     if (usernameUI != null)
-                    //     {
-                    //         Debug.Log("Found UsernameEntryUI, showing panel.");
-                    //         usernameUI.Show(finalScore);
-                    //     }
-                    // }
+                        if (usernameUI != null)
+                        {
+                            Debug.Log("Found UsernameEntryUI, showing panel.");
+                            usernameUI.Show(finalScore);
+                        }
+                    }
                 }
             }
             // TODO: Temporarily spawn infinite balls to avoid crashes until CPU ball management is implemented.

@@ -32,6 +32,7 @@ public class UsernameEntryUI : MonoBehaviour
     {
         pendingScore = score;
         panel.SetActive(true);
+        Time.timeScale = 0f;
         inputField.text = "";
         inputField.Select();
         inputField.ActivateInputField();
@@ -41,11 +42,14 @@ public class UsernameEntryUI : MonoBehaviour
     {
         string playerName = inputField.text;
         if (string.IsNullOrEmpty(playerName))
-            return;
+            playerName = "Player";
+        if (LeaderboardManager.instance != null)
+            LeaderboardManager.instance.AddScore(playerName, pendingScore);
+        else
+            Debug.LogWarning("[UsernameEntryUI] LeaderboardManager.instance is null"); //error check
 
-        LeaderboardManager.instance.AddScore(playerName, pendingScore);
         panel.SetActive(false);
-
-        LeaderboardManager.instance.ShowLeaderboard();
+        if (LeaderboardManager.instance != null)
+            LeaderboardManager.instance.ShowLeaderboard();
     }
 }

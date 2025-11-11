@@ -3,6 +3,9 @@ using UnityEngine.SceneManagement;
 
 public class MenuButtons : MonoBehaviour
 {
+    [Header("Scene Names")]
+    public string mainMenuSceneName = "MenuScene"; // set this in inspector
+
     [Header("Menu References")]
     public GameObject mainMenu; // assign Main Menu GameObject in Inspector
     public GameObject difficultyMenu; // assign Difficulty Menu GameObject in Inspector
@@ -32,47 +35,45 @@ public class MenuButtons : MonoBehaviour
             difficultyMenu.SetActive(false);
         if (leaderboardMenu != null)
             leaderboardMenu.SetActive(true);
+        if (LeaderboardManager.instance != null)
+            LeaderboardManager.instance.ShowLeaderboard();
     }
 
     public void GoBack()
     {
-        // Activate the main menu
-        if (mainMenu != null)
-        {
-            mainMenu.SetActive(true);
-        }
-
-        //Deactivate leaderboard menu
-        if (leaderboardMenu != null)
+        // ensure game is unpaused
+        Time.timeScale = 1f;
+        if (leaderboardMenu != null && leaderboardMenu.activeSelf && mainMenu != null)
         {
             leaderboardMenu.SetActive(false);
+            mainMenu.SetActive(true);
+            return;
         }
 
-        // Deactivate difficulty menu
-        if (difficultyMenu != null)
+        if (!string.IsNullOrEmpty(mainMenuSceneName))
         {
-            difficultyMenu.SetActive(false);
+            SceneManager.LoadScene(mainMenuSceneName);
+            return;
         }
+        if (mainMenu != null)
+            mainMenu.SetActive(true);
     }
 
     public void StartEasy()
     {
-        // Load the GameplayScene, easy difficulty
+        difficulty = 1; // setting before scene load
         SceneManager.LoadScene("GameplayScene");
-        difficulty = 1;
     }
 
     public void StartMedium()
     {
-        // Load the GameplayScene, medium difficulty
-        SceneManager.LoadScene("GameplayScene");
         difficulty = 2;
+        SceneManager.LoadScene("GameplayScene");
     }
 
     public void StartHard()
     {
-        // Load the GameplayScene, hard difficulty
-        SceneManager.LoadScene("GameplayScene");
         difficulty = 3;
+        SceneManager.LoadScene("GameplayScene");
     }
 }
