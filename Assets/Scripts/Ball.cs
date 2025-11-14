@@ -62,6 +62,12 @@ public class Ball : MonoBehaviour
 
                     if (LeaderboardManager.instance.Qualifies(finalScore))
                     {
+                        // Do not quit game if it is running for training
+                        if (PaddleAgent.IsTraining())
+                        {
+                            return;
+                        }
+
                         Debug.Log("Score qualifies for leaderboard: " + finalScore);
 
                         UsernameEntryUI usernameUI = UsernameEntryUI.instance;
@@ -78,12 +84,14 @@ public class Ball : MonoBehaviour
             else //if cpu
             {
                 cpuAgent.AddMissPenaltyAndEnd();
+
+                ballCount.decrementBallCount();
                 LaunchBall();
             }
         }
     }
 
-    void LaunchBall()
+    public void LaunchBall()
     {
         rb = GetComponent<Rigidbody2D>();
 

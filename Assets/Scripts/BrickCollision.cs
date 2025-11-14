@@ -33,5 +33,10 @@ public class BrickCollision : MonoBehaviour
 
         // Destroy the brick after scoring
         Destroy(gameObject);
+
+        if (!ball.human)
+        {
+            cpuAgent.DecrementBrickCount();
+        }
     }
 }

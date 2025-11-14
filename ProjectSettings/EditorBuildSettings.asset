@@ -11,7 +11,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/InitialSetupTestScene.unity
     guid: 727ff1889bc391149919a8b5565de96f
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/DifficultyScene.unity
     guid: c47e0fed4fedd4796b660b69fea9998f
   - enabled: 1

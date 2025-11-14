@@ -1591,7 +1591,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ballSpeed: {fileID: 788616426}
-  ballCount: {fileID: 0}
+  ballCount: {fileID: 1309577756}
   human: 0
   paddleWidth: {fileID: 788616427}
 --- !u!58 &788616422
@@ -3857,6 +3857,7 @@ GameObject:
   - component: {fileID: 1553062254}
   - component: {fileID: 1553062253}
   - component: {fileID: 1553062252}
+  - component: {fileID: 1553062256}
   m_Layer: 0
   m_Name: MLAgent
   m_TagString: MLAgent
@@ -3899,6 +3900,8 @@ MonoBehaviour:
   rewardHitPaddle: 0.1
   rewardMiss: -1
   stepPenalty: -0.001
+  cpuBrickGeneration: {fileID: 1645416926}
+  cpuBall: {fileID: 788616421}
   ballRb: {fileID: 788616423}
   paddle: {fileID: 1150144333}
   arenaHalfWidth: 8.8
@@ -3911,6 +3914,7 @@ MonoBehaviour:
   logEveryNSteps: 25
   stepCount: 0
   episodeCount: 0
+  maxStepsPerEpisode: 5000
 --- !u!114 &1553062254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3957,6 +3961,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1553062256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1553062251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88b6042bc9a5d4aa58d931eae49442e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
 --- !u!1 &1557917473
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BrickGeneration : MonoBehaviour
 {
-    public event System.Action OnGenerationComplete; // Can be used for ball holding script
+    public event System.Action<int> OnGenerationComplete; // Can be used for ball holding script
 
     [Header("Player")]
     public bool human;
@@ -48,6 +48,8 @@ public class BrickGeneration : MonoBehaviour
                 brickSize = srPrefab.bounds.size;
         }
 
+        int brickCount = 0;
+
         for (int row = 0; row < rows; row++)
         {
             for (int col = 0; col < columns; col++)
@@ -64,6 +66,8 @@ public class BrickGeneration : MonoBehaviour
                     Quaternion.identity,
                     transform
                 );
+
+                brickCount += 1;
 
                 // Color brick gradient by row
                 SpriteRenderer sr = newBrick.GetComponent<SpriteRenderer>();
@@ -131,7 +135,7 @@ public class BrickGeneration : MonoBehaviour
                 }
             }
         }
-        OnGenerationComplete?.Invoke(); // Mark brick gen complete
+        OnGenerationComplete?.Invoke(brickCount); // Mark brick gen complete
     }
 
     IEnumerator AnimateBrickSpawn(GameObject brick)
@@ -161,5 +165,12 @@ public class BrickGeneration : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
+    }
+
+    // Call this to clear and regenerate bricks
+    public void ResetBricks()
+    {
+        ClearLevel();
+        StartCoroutine(GenerateLevel());
     }
 }

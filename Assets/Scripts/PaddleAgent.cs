@@ -12,6 +12,13 @@ public class PaddleAgent : Agent
     public float rewardMiss = -3f;
     public float stepPenalty = -0.0005f;
 
+    // Used to regenerate bricks when all bricks are destroyed
+    public BrickGeneration cpuBrickGeneration;
+    private int currentBrickCount = 0;
+
+    // Used to set the ball's position when starting new episode
+    public Ball cpuBall;
+
     // called from external codes
     public void AddBrickReward()
     {
@@ -36,6 +43,13 @@ public class PaddleAgent : Agent
         AddReward(rewardMiss);
         Debug.Log($"[PaddleAgent] Miss penalty {rewardMiss} -> EndEpisode()", this);
         EndEpisode();
+
+        // If training, regenerate bricks and reset ball's position for new episode.
+        if (PaddleAgent.IsTraining())
+        {
+            cpuBrickGeneration.ResetBricks(); // regenerate bricks
+            cpuBall.LaunchBall(); // reset ball position
+        }
     }
 
     public Rigidbody2D ballRb;
@@ -55,6 +69,11 @@ public class PaddleAgent : Agent
     public int stepCount;
     public int episodeCount = 0;
 
+    [Header("Training Parameters")]
+    // Round trip of ball is about 25 steps and 84 blocks.
+    // 25 * 84 = 2100, set 3000 as initial value, leaving some margin.
+    public int maxStepsPerEpisode = 3000;
+
     public override void Initialize()
     {
         //some errors to be thrown if not set correctly
@@ -62,6 +81,13 @@ public class PaddleAgent : Agent
             Debug.LogError("PaddleAgent: ballRb not assigned.");
         if (!paddle)
             Debug.LogError("PaddleAgent: paddle not assigned.");
+        if (!cpuBrickGeneration)
+            Debug.LogError("PaddleAgent: cpuBrickGeneration not assigned.");
+        if (!cpuBall)
+            Debug.LogError("PaddleAgent: cpuBall not assigned.");
+
+        // Add an event to get bricks count
+        cpuBrickGeneration.OnGenerationComplete += OnBrickGenerationComplete;
     }
 
     public override void OnEpisodeBegin()
@@ -199,6 +225,13 @@ public class PaddleAgent : Agent
     {
         AddReward(stepPenalty); //small penalty for each decision
 
+        // End the game if ball cannot break last brick and keeps hitting wall, to prevent learning from stagnating.
+        if (stepCount >= maxStepsPerEpisode)
+        {
+            StartNewEpisode();
+            return;
+        }
+
         if (actions.ContinuousActions.Length == 0) // no actions
             return;
 
@@ -235,5 +268,37 @@ public class PaddleAgent : Agent
             }
             actions[0] = PaddleMovement.GetMovementInput();
         }
+    }
+
+    // An action called when brick generation is completed
+    private void OnBrickGenerationComplete(int brickCount)
+    {
+        currentBrickCount = brickCount;
+    }
+
+    // Called when a CPU's brick is destroyed
+    public void DecrementBrickCount()
+    {
+        currentBrickCount -= 1;
+        if (currentBrickCount == 0)
+        {
+            StartNewEpisode();
+        }
+    }
+
+    // Regenerate bricks to start new episode
+    private void StartNewEpisode()
+    {
+        EndEpisode();
+        cpuBrickGeneration.ResetBricks(); // regenerate bricks
+        cpuBall.LaunchBall(); // reset ball position
+    }
+
+    // Returns whether agent is training
+    public static bool IsTraining()
+    {
+        // If training, communicating with Python
+        bool isTraining = Academy.Instance.IsCommunicatorOn;
+        return isTraining;
     }
 }

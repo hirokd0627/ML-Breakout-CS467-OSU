@@ -12,6 +12,15 @@ public class MenuButtons : MonoBehaviour
     public GameObject leaderboardMenu; // assign leaderboard game object
     public int difficulty; // Storage for game dofficulty selection. 1 = easy, 2 = medium, 3 = hard
 
+    void Awake()
+    {
+        // If training, skip menu selection and start game.
+        if (PaddleAgent.IsTraining())
+        {
+            StartEasy();
+        }
+    }
+
     public void StartGame()
     {
         // Deactivate the main menu
