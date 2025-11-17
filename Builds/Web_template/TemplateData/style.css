@@ -15,6 +15,17 @@ body { padding: 0; margin: 0 }
 #unity-warning { position: absolute; left: 50%; top: 5%; transform: translate(-50%); background: white; padding: 10px; display: none }
 #unity-logo { width: 154px; height: 130px; background: url('unity-logo-dark.png') no-repeat center }
 
+#download-app {
+  float: left;
+  font-family: "Silkscreen", sans-serif;
+}
+#download-app ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+#download-app li {
+  line-height: 1.5em;
+}
 
 /* font */
 .silkscreen-regular {

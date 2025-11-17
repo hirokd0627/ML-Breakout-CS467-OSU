@@ -1,0 +1,213 @@
+# ref. https://game.ci/docs/github/getting-started
+name: Unity CI
+
+on:
+  push:
+    branches:
+      - deploy # run when merged into unity branch
+
+env:
+  UNITY_VERSION: "6000.0.58f2"
+
+jobs:
+  # Build for Windows Platform
+  buildForWindows:
+    runs-on: windows-2022
+    env:
+      METHOD: Build.BuildWindows
+      OUTPUT_PATH: Builds/Windows # defined in the Build script
+      TARGET_PLATFORM: StandaloneWindows64
+      ARTIFACT: Windows
+    steps:
+      # Check out
+      - uses: actions/checkout@v4
+
+      # Cache
+      - uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-${{ env.TARGET_PLATFORM }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-${{ env.TARGET_PLATFORM }}-
+
+      # Build
+      - uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: ${{ env.TARGET_PLATFORM }}
+          unityVersion: ${{ env.UNITY_VERSION }}
+          buildMethod: ${{ env.METHOD }}
+
+      # Compress
+      - name: Compress artifact
+        run: |
+          Set-Location -Path Builds
+          New-Item -ItemType Directory -Force -Path ./upload
+          Compress-Archive -Path Windows/* -DestinationPath ./upload/mlbreakout-win.zip
+
+      # Upload builds to artifact
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.ARTIFACT }}
+          path: ${{ env.OUTPUT_PATH }}
+
+      # Upload
+      - name: R2 Upload Action
+        uses: ryand56/r2-upload-action@v1.4
+        with:
+          r2-account-id: ${{ secrets.CF_R2_ACCOUNT_ID }}
+          r2-access-key-id: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
+          r2-secret-access-key: ${{ secrets.CF_R2_SECRET_ACCESS_KEY }}
+          r2-bucket: ${{ secrets.CF_R2_BUCKET  }}
+          source-dir: Builds/upload
+          destination-dir: Builds # to Builds/mlbreakout-win.zip
+
+  # Build for macOS Platform
+  buildForMacOS:
+    runs-on: macos-latest
+    env:
+      METHOD: Build.BuildMac
+      OUTPUT_PATH: Builds/macOS # defined in the Build script
+      TARGET_PLATFORM: StandaloneOSX
+      ARTIFACT: macOS
+    steps:
+      # Check out
+      - uses: actions/checkout@v4
+
+      # Cache
+      - uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-${{ env.TARGET_PLATFORM }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-${{ env.TARGET_PLATFORM }}-
+
+      # Build
+      - uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: ${{ env.TARGET_PLATFORM }}
+          unityVersion: ${{ env.UNITY_VERSION }}
+          buildMethod: ${{ env.METHOD }}
+
+      # Compress
+      - name: Compress artifact
+        run: |
+          mkdir -p upload
+          zip -r upload/mlbreakout-mac.zip Builds/macOS
+
+      # Upload builds to artifact
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.ARTIFACT }}
+          path: ${{ env.OUTPUT_PATH }}
+
+      # Upload
+      - name: R2 Upload Action
+        uses: ryand56/r2-upload-action@v1.4
+        with:
+          r2-account-id: ${{ secrets.CF_R2_ACCOUNT_ID }}
+          r2-access-key-id: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
+          r2-secret-access-key: ${{ secrets.CF_R2_SECRET_ACCESS_KEY }}
+          r2-bucket: ${{ secrets.CF_R2_BUCKET  }}
+          source-dir: upload
+          destination-dir: Builds # to Builds/mlbreakout-mac.zip
+
+  # Build for Web Platform
+  buildForWeb:
+    runs-on: ubuntu-latest
+    env:
+      METHOD: Build.BuildWeb
+      OUTPUT_PATH: Builds/Web # defined in the Build script
+      TARGET_PLATFORM: WebGL
+      ARTIFACT: Web
+      CF_PAGES_PROJ: ml-breakout-2025-fall
+    steps:
+      # Deleted unnecessary files because there was a case where the capacity was insufficient during the build.
+      # ref. https://game.ci/docs/troubleshooting/common-issues/#no-space-left-on-device
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+
+      # Check out
+      - uses: actions/checkout@v4
+
+      # Cache
+      - uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-${{ env.TARGET_PLATFORM }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-${{ env.TARGET_PLATFORM }}-
+
+      # Build
+      - uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: ${{ env.TARGET_PLATFORM }}
+          unityVersion: ${{ env.UNITY_VERSION }}
+          buildMethod: ${{ env.METHOD }}
+
+      # Upload builds to artifact
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.ARTIFACT }}
+          path: ${{ env.OUTPUT_PATH }}
+
+      # Adjust files and directory location for uploading.
+      - name: Copy template files
+        run: |
+          mkdir -p /tmp/Web
+          cp -rf ${{ env.OUTPUT_PATH }}/* /tmp/Web/
+          cp -rf Builds/Web_template/TemplateData/* /tmp/Web/TemplateData/
+          cp -rf Builds/Web_template/index_gz.html /tmp/Web/index.html
+          mv /tmp/Web/Build Builds/Web_assets
+
+      # Upload only html, images, styles to Pages
+      - name: Deploy to Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CF_PAGES_API_TOKEN }}
+          accountId: ${{ secrets.CF_R2_ACCOUNT_ID }}
+          command: pages deploy /tmp/Web --project-name=${{ env.CF_PAGES_PROJ }} --branch main
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+      # Upload large size files to R2 Storage
+      - name: Install Wrangler CLI
+        run: npm install -g wrangler@4.47.0
+      - name: Upload large files to R2
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_R2_SECRET_TOKEN }}
+        run: |
+          wrangler r2 object put ${{ secrets.CF_R2_BUCKET  }}/Web/Web.data.gz \
+            --file ./Builds/Web_assets/Web.data.gz \
+            --content-type "application/octet-stream" \
+            --content-encoding "gzip" \
+            --remote
+
+          wrangler r2 object put ${{ secrets.CF_R2_BUCKET  }}/Web/Web.framework.js.gz \
+            --file ./Builds/Web_assets/Web.framework.js.gz \
+            --content-type "application/javascript" \
+            --content-encoding "gzip" \
+            --remote
+
+          wrangler r2 object put ${{ secrets.CF_R2_BUCKET  }}/Web/Web.wasm.gz \
+            --file ./Builds/Web_assets/Web.wasm.gz \
+            --content-type "application/wasm" \
+            --content-encoding "gzip" \
+            --remote
+
+          wrangler r2 object put ${{ secrets.CF_R2_BUCKET  }}/Web/Web.loader.js \
+            --file ./Builds/Web_assets/Web.loader.js \
+            --content-type "application/javascript" \
+            --remote

@@ -23,6 +23,13 @@
       </div>
       <div id="unity-warning"> </div>
       <div id="unity-footer">
+        <div id="download-app">
+          <p>For smoother gameplay, download the Windows or Mac app.</p>
+          <ul>
+            <li><a href="https://pub-7e3c605ea93c4a3a8b66132b93dbd396.r2.dev/Builds/mlbreakout-win.zip">windows</a> -> After extracting the file, run mlbreakout.exe.</li>
+            <li><a href="https://pub-7e3c605ea93c4a3a8b66132b93dbd396.r2.dev/Builds/mlbreakout-mac.zip">macOS</a> -> After extracting the file, run mlbreakout.app.</li>
+          </ul>
+        </div>
         <div id="unity-fullscreen-button"></div>
         <div id="unity-build-title" class="silkscreen-regular">Full Screen</div>
       </div>
@@ -32,13 +39,13 @@
     </div>
     <script>
       var canvas = document.querySelector("#unity-canvas");
-      var buildUrl = "Build";
+      var buildUrl = "https://pub-7e3c605ea93c4a3a8b66132b93dbd396.r2.dev/Web";
       var loaderUrl = buildUrl + "/Web.loader.js";
       var config = {
         arguments: [],
-        dataUrl: buildUrl + "/Web.data",
-        frameworkUrl: buildUrl + "/Web.framework.js",
-        codeUrl: buildUrl + "/Web.wasm",
+        dataUrl: buildUrl + "/Web.data.gz",
+        frameworkUrl: buildUrl + "/Web.framework.js.gz",
+        codeUrl: buildUrl + "/Web.wasm.gz",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "ML-Breakout_2025_Fall",
         productName: "ml-breakout",
