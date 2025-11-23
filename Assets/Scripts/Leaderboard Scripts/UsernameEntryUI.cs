@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,6 +13,9 @@ public class UsernameEntryUI : MonoBehaviour
 
     private int pendingScore;
 
+    [Header("Sound effect")]
+    public SoundEffect soundEffect = null; // Used to play sound effect
+
     void Awake()
     {
         if (instance == null)
@@ -22,6 +26,9 @@ public class UsernameEntryUI : MonoBehaviour
 
     void Start()
     {
+        if (soundEffect == null)
+            throw new ArgumentException("soundEffect");
+
         submitButton.onClick.AddListener(OnSubmit);
         if (panel != null)
             panel.SetActive(false);
@@ -47,6 +54,8 @@ public class UsernameEntryUI : MonoBehaviour
             LeaderboardManager.instance.AddScore(playerName, pendingScore);
         else
             Debug.LogWarning("[UsernameEntryUI] LeaderboardManager.instance is null"); //error check
+
+        soundEffect.PlaySound("itemSelect");
 
         panel.SetActive(false);
         if (LeaderboardManager.instance != null)

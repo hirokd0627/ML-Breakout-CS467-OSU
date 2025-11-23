@@ -19,6 +19,8 @@ public class Ball : MonoBehaviour
 
     public PaddleWidth paddleWidth; // Controls paddle width
 
+    public SoundEffect soundEffect = null; // Used to play sound effect
+
     void Awake()
     {
         var go = GameObject.FindWithTag("MLAgent");
@@ -33,6 +35,9 @@ public class Ball : MonoBehaviour
 
         if (paddleWidth == null)
             throw new ArgumentException("paddleWidth");
+
+        if (soundEffect == null)
+            throw new ArgumentException("soundEffect");
 
         startPosition = transform.position;
         LaunchBall();
@@ -112,12 +117,31 @@ public class Ball : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Paddle") && !human)
+        bool hitPaddle = collision.gameObject.CompareTag("Paddle");
+        bool hitWall =
+            collision.gameObject.CompareTag("Wall") || collision.gameObject.CompareTag("TopWall");
+        bool hitBrick = collision.gameObject.CompareTag("Brick");
+
+        // Play sound effect
+        if (hitPaddle)
+        {
+            soundEffect.PlaySound("hitPaddle");
+        }
+        else if (hitWall)
+        {
+            soundEffect.PlaySound("hitWall");
+        }
+        else if (hitBrick)
+        {
+            soundEffect.PlaySound("hitBrick");
+        }
+
+        if (hitPaddle && !human)
         {
             cpuAgent.AddPaddleHitReward();
         }
 
-        if (collision.gameObject.CompareTag("Paddle")) // collided with paddle
+        if (hitPaddle) // collided with paddle
         {
             if (HitPaddleTopSide(collision)) // top side
             {

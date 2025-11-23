@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -33,6 +34,8 @@ public class LeaderboardManager : MonoBehaviour
     public Button backButton;
     public string mainMenuSceneName = "MenuScene";
 
+    public SoundEffect soundEffect = null; // Used to play sound effect
+
     void Awake()
     {
         if (instance == null)
@@ -59,6 +62,12 @@ public class LeaderboardManager : MonoBehaviour
 
         if (leaderboardPanel != null)
             leaderboardPanel.SetActive(false);
+    }
+
+    void Start()
+    {
+        if (soundEffect == null)
+            throw new ArgumentException("soundEffect");
     }
 
     // Return whether a score qualifies for top 10
@@ -149,8 +158,12 @@ public class LeaderboardManager : MonoBehaviour
     {
         Time.timeScale = 1f; // ensure time resumes before scene load
         if (!string.IsNullOrEmpty(mainMenuSceneName))
-            SceneManager.LoadScene(mainMenuSceneName);
+        {
+            StartCoroutine(soundEffect.PlaySoundAndLoadScene("itemSelect", mainMenuSceneName));
+        }
         else
+        {
             Debug.LogWarning("[LeaderboardManager] mainMenuSceneName not set.");
+        }
     }
 }
