@@ -5,8 +5,8 @@ public class PaddleMovement : MonoBehaviour
 {
     // Serialized values, max and min set in inspector
     public float speed = 18;
-    public float maxX = 7f;
-    public float minX = 7f;
+    public float maxX = -1.1f;
+    public float minX = -7.7f;
 
     float horizMovement;
 
@@ -79,6 +79,10 @@ public class PaddleMovement : MonoBehaviour
             // NOTE: Depending on input timing, position may exceed minX or maxX.
             //       This will be addressed in another issue.
             nextPos = paddle.position + Vector3.right * movement * speed * timeDelta;
+
+            // Limit movement range
+            nextPos.x = Mathf.Min(nextPos.x, maxX);
+            nextPos.x = Mathf.Max(nextPos.x, minX);
         }
         return nextPos;
     }

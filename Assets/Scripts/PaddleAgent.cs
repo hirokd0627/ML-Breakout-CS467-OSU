@@ -57,8 +57,8 @@ public class PaddleAgent : Agent
     public float arenaHalfWidth = 8.8f; //full span of cpu side since center is 0
 
     public float arenaHalfHeight = 4.5f; //for normialization, half of the y height span of cpu side
-    public float paddleMoveMaxX = 7.5f; // Maximum X position of the paddle
-    public float paddleMoveMinX = 1.4f; // Minimum X position of the paddle
+    public float paddleMoveMaxX = 7.7f; // Maximum X position of the paddle
+    public float paddleMoveMinX = 1.1f; // Minimum X position of the paddle
     public float paddleMoveSpeed = 18; // Paddle move speed
 
     public float maxBallSpeed = 5f; // fasted expected speed

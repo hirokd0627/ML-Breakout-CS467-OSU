@@ -2587,7 +2587,7 @@ Transform:
   m_GameObject: {fileID: 1150144330}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.53, y: -4.5, z: 0}
+  m_LocalPosition: {x: 4.5, y: -4.5, z: 0}
   m_LocalScale: {x: 2, y: 0.3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3909,8 +3909,8 @@ MonoBehaviour:
   paddle: {fileID: 1150144333}
   arenaHalfWidth: 8.8
   arenaHalfHeight: 4.5
-  paddleMoveMaxX: 7.5
-  paddleMoveMinX: 1.4
+  paddleMoveMaxX: 7.7
+  paddleMoveMinX: 1.1
   paddleMoveSpeed: 18
   maxBallSpeed: 5
   logObservations: 0
@@ -4945,8 +4945,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 18
-  maxX: -1.4
-  minX: -7.5
+  maxX: -1.1
+  minX: -7.7
 --- !u!212 &1806269236
 SpriteRenderer:
   m_ObjectHideFlags: 0
