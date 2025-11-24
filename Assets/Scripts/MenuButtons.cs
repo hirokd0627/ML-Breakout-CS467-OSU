@@ -92,18 +92,21 @@ public class MenuButtons : MonoBehaviour
     public void StartEasy()
     {
         difficulty = 1; // setting before scene load
+        GameSettings.SelectedDifficulty = difficulty;
         StartCoroutine(soundEffect.PlaySoundAndLoadScene("itemSelect", "GameplayScene"));
     }
 
     public void StartMedium()
     {
         difficulty = 2;
+        GameSettings.SelectedDifficulty = difficulty;
         StartCoroutine(soundEffect.PlaySoundAndLoadScene("itemSelect", "GameplayScene"));
     }
 
     public void StartHard()
     {
         difficulty = 3;
+        GameSettings.SelectedDifficulty = difficulty;
         StartCoroutine(soundEffect.PlaySoundAndLoadScene("itemSelect", "GameplayScene"));
     }
 }

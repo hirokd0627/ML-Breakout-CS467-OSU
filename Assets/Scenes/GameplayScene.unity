@@ -3861,6 +3861,7 @@ GameObject:
   - component: {fileID: 1553062253}
   - component: {fileID: 1553062252}
   - component: {fileID: 1553062256}
+  - component: {fileID: 1553062257}
   m_Layer: 0
   m_Name: MLAgent
   m_TagString: MLAgent
@@ -3980,6 +3981,22 @@ MonoBehaviour:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
+--- !u!114 &1553062257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1553062251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a2f11b7997704d95ad542978e020a01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  difficulty: 1
+  LowLevel: {fileID: 5022602860645237092, guid: 27a7bb8812b41ad42a800d5b67448fa5, type: 3}
+  MediumLevel: {fileID: 0}
+  HardLevel: {fileID: 0}
 --- !u!1 &1557917473
 GameObject:
   m_ObjectHideFlags: 0
