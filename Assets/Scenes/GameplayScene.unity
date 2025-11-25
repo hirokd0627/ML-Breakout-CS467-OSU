@@ -3995,8 +3995,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   difficulty: 1
   LowLevel: {fileID: 5022602860645237092, guid: 27a7bb8812b41ad42a800d5b67448fa5, type: 3}
-  MediumLevel: {fileID: 0}
-  HardLevel: {fileID: 0}
+  MediumLevel: {fileID: 5022602860645237092, guid: 09c4be916460513409fd76dd0578cfa4, type: 3}
+  HardLevel: {fileID: 5022602860645237092, guid: fdf53fdf7c7d32d40a8fc344c56608fc, type: 3}
 --- !u!1 &1557917473
 GameObject:
   m_ObjectHideFlags: 0
