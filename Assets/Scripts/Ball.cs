@@ -20,6 +20,7 @@ public class Ball : MonoBehaviour
     public PaddleWidth paddleWidth; // Controls paddle width
 
     public SoundEffect soundEffect = null; // Used to play sound effect
+    public int cpuBalls;
 
     void Awake()
     {
@@ -50,7 +51,23 @@ public class Ball : MonoBehaviour
         // Relaunch ball or end game
         if (ballPosY < lowerBound && !gameOver)
         {
-            if (human)
+            if (!human)
+            {
+                cpuAgent.AddMissPenaltyAndEnd();
+                cpuBalls = ballCount.ballCount;
+                if (ballCount.ballCount == 0)
+                {
+                    Destroy(gameObject);
+                }
+                else
+                {
+                    ballCount.decrementBallCount();
+                    LaunchBall();
+                }
+                ;
+            }
+            //  CPU Runs out of lives
+            else
             {
                 gameOver = ballCount.ballCount == 0;
                 if (!gameOver)
@@ -64,34 +81,12 @@ public class Ball : MonoBehaviour
                     Destroy(gameObject);
 
                     int finalScore = ScoreManager.instance.humanScore;
+                    int cpuScore = ScoreManager.instance.cpuScore;
 
-                    if (LeaderboardManager.instance.Qualifies(finalScore))
-                    {
-                        // Do not quit game if it is running for training
-                        if (PaddleAgent.IsTraining())
-                        {
-                            return;
-                        }
+                    int humanBalls = ballCount.ballCount; // should be 0 now
 
-                        Debug.Log("Score qualifies for leaderboard: " + finalScore);
-
-                        UsernameEntryUI usernameUI = UsernameEntryUI.instance;
-
-                        if (usernameUI != null)
-                        {
-                            Debug.Log("Found UsernameEntryUI, showing panel.");
-                            usernameUI.Show(finalScore);
-                        }
-                    }
+                    WinCon.instance.HandleGameOver(finalScore, cpuScore, humanBalls, cpuBalls);
                 }
-            }
-            // TODO: Temporarily spawn infinite balls to avoid crashes until CPU ball management is implemented.
-            else //if cpu
-            {
-                cpuAgent.AddMissPenaltyAndEnd();
-
-                ballCount.decrementBallCount();
-                LaunchBall();
             }
         }
     }
