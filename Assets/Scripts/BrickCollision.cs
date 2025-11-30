@@ -34,6 +34,20 @@ public class BrickCollision : MonoBehaviour
         // Destroy the brick after scoring
         Destroy(gameObject);
 
+        if (!PaddleAgent.IsTraining())
+        {
+            // When all the bricks are broken, ends the game.
+            int finalScore = ScoreManager.instance.humanScore;
+            int cpuScore = ScoreManager.instance.cpuScore;
+            if (
+                (finalScore >= BrickGeneration.TotalPoint)
+                || (cpuScore >= BrickGeneration.TotalPoint)
+            )
+            {
+                GameOverManager.instance.EndGame();
+            }
+        }
+
         if (!ball.human)
         {
             cpuAgent.DecrementBrickCount();

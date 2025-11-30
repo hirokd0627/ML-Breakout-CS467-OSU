@@ -29,7 +29,7 @@ public class BrickGeneration : MonoBehaviour
     public Color colorRow1 = Color.red;
     public Color colorRow2 = BrickColorOrange; //orange
     public Color colorRow3 = Color.green;
-    public Color colorRow4 = new Color(0.4f, 0.8f, 1f); //green
+    public Color colorRow4 = new Color(0.4f, 0.8f, 1f); //light blue
     public Color colorRow5 = Color.yellow;
     public Color colorRow6 = Color.blue;
 
@@ -87,37 +87,37 @@ public class BrickGeneration : MonoBehaviour
                     // Assign color based on row
                     if (row == 0)
                     {
-                        sr.color = colorRow1;
+                        sr.color = colorRow1; // red
                         if (bc != null)
                             bc.points = 7;
                     }
                     else if (row == 1)
                     {
-                        sr.color = colorRow2;
+                        sr.color = colorRow2; // orange
                         if (bc != null)
                             bc.points = 7;
                     }
                     else if (row == 2)
                     {
-                        sr.color = colorRow3;
+                        sr.color = colorRow3; // green
                         if (bc != null)
                             bc.points = 4;
                     }
                     else if (row == 3)
                     {
-                        sr.color = colorRow4;
-                        if (bc != null)
-                            bc.points = 4;
-                    }
-                    else if (row == 4)
-                    {
-                        sr.color = colorRow5;
+                        sr.color = colorRow4; // light blue
                         if (bc != null)
                             bc.points = 1;
                     }
+                    else if (row == 4)
+                    {
+                        sr.color = colorRow5; // yellow
+                        if (bc != null)
+                            bc.points = 4;
+                    }
                     else
                     {
-                        sr.color = colorRow6;
+                        sr.color = colorRow6; // blue
                         if (bc != null)
                             bc.points = 1;
                     }
@@ -172,5 +172,11 @@ public class BrickGeneration : MonoBehaviour
     {
         ClearLevel();
         StartCoroutine(GenerateLevel());
+    }
+
+    // Total brick point
+    public static int TotalPoint
+    {
+        get { return 336; }
     }
 }

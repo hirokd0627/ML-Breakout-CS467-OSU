@@ -26,9 +26,9 @@ public class WinCon : MonoBehaviour
     public string DetermineWinner(int humanScore, int cpuScore, int humanBalls, int cpuBalls)
     {
         // Score victory
-        if (humanScore >= 336)
+        if (humanScore >= BrickGeneration.TotalPoint)
             return "Player";
-        if (cpuScore >= 336)
+        if (cpuScore >= BrickGeneration.TotalPoint)
             return "CPU";
 
         // Ball depletion

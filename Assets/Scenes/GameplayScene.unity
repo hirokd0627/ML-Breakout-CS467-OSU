@@ -1596,6 +1596,8 @@ MonoBehaviour:
   human: 0
   paddleWidth: {fileID: 788616427}
   soundEffect: {fileID: 1562074561}
+  cpuBalls: 0
+  humanPaddle: {fileID: 1806269235}
 --- !u!58 &788616422
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1886,6 +1888,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 840974403}
   m_CullTransparentMesh: 1
+--- !u!1 &903184821
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 903184823}
+  - component: {fileID: 903184822}
+  m_Layer: 0
+  m_Name: GameOverManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &903184822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 903184821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b02ab2c03ecb4a10b5e0f99f15882f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  humanBall: {fileID: 1676996157}
+  cpuBall: {fileID: 788616421}
+  cpuAgent: {fileID: 1553062253}
+  humanPaddle: {fileID: 1806269235}
+--- !u!4 &903184823
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 903184821}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.5719262, y: -1.8872209, z: 0.027152669}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1023192170
 GameObject:
   m_ObjectHideFlags: 0
@@ -2586,7 +2636,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1150144330}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 4.5, y: -4.5, z: 0}
   m_LocalScale: {x: 2, y: 0.3, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3572,11 +3622,11 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 773465086}
-  - {fileID: 1192159373}
   - {fileID: 1269165352}
   - {fileID: 1884361260}
   - {fileID: 1627965681}
+  - {fileID: 1192159373}
+  - {fileID: 773465086}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -4903,6 +4953,9 @@ MonoBehaviour:
   colorRow4: {r: 0.4, g: 0.8, b: 1, a: 1}
   colorRow5: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   colorRow6: {r: 0, g: 0, b: 1, a: 1}
+  humanBall: {fileID: 1676996157}
+  cpuBall: {fileID: 788616421}
+  humanPaddle: {fileID: 1806269235}
 --- !u!1 &1676996156
 GameObject:
   m_ObjectHideFlags: 0
@@ -4942,6 +4995,8 @@ MonoBehaviour:
   human: 1
   paddleWidth: {fileID: 1676996163}
   soundEffect: {fileID: 1562074561}
+  cpuBalls: 0
+  humanPaddle: {fileID: 1806269235}
 --- !u!58 &1676996158
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -5157,6 +5212,9 @@ MonoBehaviour:
   colorRow4: {r: 0.4, g: 0.8, b: 1, a: 1}
   colorRow5: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   colorRow6: {r: 0, g: 0, b: 1, a: 1}
+  humanBall: {fileID: 1676996157}
+  cpuBall: {fileID: 788616421}
+  humanPaddle: {fileID: 1806269235}
 --- !u!4 &1695596854
 Transform:
   m_ObjectHideFlags: 0
@@ -5907,6 +5965,7 @@ SceneRoots:
   - {fileID: 1023192171}
   - {fileID: 1676996161}
   - {fileID: 788616425}
+  - {fileID: 1494530613}
   - {fileID: 1946484182}
   - {fileID: 753309668}
   - {fileID: 178751014}
@@ -5917,6 +5976,6 @@ SceneRoots:
   - {fileID: 1695596854}
   - {fileID: 1553062255}
   - {fileID: 350519511}
-  - {fileID: 1494530613}
   - {fileID: 1741060816}
   - {fileID: 1562074562}
+  - {fileID: 903184823}

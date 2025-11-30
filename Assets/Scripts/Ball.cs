@@ -58,13 +58,14 @@ public class Ball : MonoBehaviour
                 if (ballCount.ballCount == 0)
                 {
                     Destroy(gameObject);
+
+                    cpuAgent.StopMovement(); // stop cpu paddle movement
                 }
                 else
                 {
                     ballCount.decrementBallCount();
                     LaunchBall();
                 }
-                ;
             }
             //  CPU Runs out of lives
             else
@@ -78,14 +79,7 @@ public class Ball : MonoBehaviour
                 else
                 {
                     gameOver = true;
-                    Destroy(gameObject);
-
-                    int finalScore = ScoreManager.instance.humanScore;
-                    int cpuScore = ScoreManager.instance.cpuScore;
-
-                    int humanBalls = ballCount.ballCount; // should be 0 now
-
-                    WinCon.instance.HandleGameOver(finalScore, cpuScore, humanBalls, cpuBalls);
+                    GameOverManager.instance.EndGame();
                 }
             }
         }
@@ -256,5 +250,13 @@ public class Ball : MonoBehaviour
         Vector2 direction = rb.linearVelocity.normalized; // keep direction
         rb.linearVelocity = direction * speed;
         previousVelocity = rb.linearVelocity;
+    }
+
+    public void Destroy()
+    {
+        if (gameObject)
+        {
+            Destroy(gameObject);
+        }
     }
 }

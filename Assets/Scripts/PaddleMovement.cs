@@ -8,7 +8,8 @@ public class PaddleMovement : MonoBehaviour
     public float maxX = -1.1f;
     public float minX = -7.7f;
 
-    float horizMovement;
+    // Whether the paddle moves
+    private bool isMovement = true;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start() { }
@@ -16,7 +17,7 @@ public class PaddleMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (IsHumanInput())
+        if (IsHumanInput() && isMovement)
         {
             // Moves paddle
             transform.position = NextPaddlePosition(
@@ -85,5 +86,13 @@ public class PaddleMovement : MonoBehaviour
             nextPos.x = Mathf.Max(nextPos.x, minX);
         }
         return nextPos;
+    }
+
+    /// <summary>
+    /// Sets to stop moving
+    /// </summary>
+    public void StopMovement()
+    {
+        isMovement = false;
     }
 }

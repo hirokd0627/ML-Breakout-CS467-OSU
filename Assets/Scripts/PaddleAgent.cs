@@ -19,6 +19,9 @@ public class PaddleAgent : Agent
     // Used to set the ball's position when starting new episode
     public Ball cpuBall;
 
+    // Whether the paddle moves
+    private bool isMovable = true;
+
     // called from external codes
     public void AddBrickReward()
     {
@@ -223,6 +226,11 @@ public class PaddleAgent : Agent
 
     public override void OnActionReceived(ActionBuffers actions)
     {
+        if (!isMovable)
+        {
+            return;
+        }
+
         AddReward(stepPenalty); //small penalty for each decision
 
         // End the game if ball cannot break last brick and keeps hitting wall, to prevent learning from stagnating.
@@ -282,7 +290,10 @@ public class PaddleAgent : Agent
         currentBrickCount -= 1;
         if (currentBrickCount == 0)
         {
-            StartNewEpisode();
+            if (PaddleAgent.IsTraining())
+            {
+                StartNewEpisode();
+            }
         }
     }
 
@@ -300,5 +311,11 @@ public class PaddleAgent : Agent
         // If training, communicating with Python
         bool isTraining = Academy.Instance.IsCommunicatorOn;
         return isTraining;
+    }
+
+    // Stop paddle movement
+    public void StopMovement()
+    {
+        isMovable = false;
     }
 }
